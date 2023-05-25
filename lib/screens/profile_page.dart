@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase/image_upload.dart';
 import 'package:flutter_firebase/model/user_model.dart';
+import 'package:flutter_firebase/show_images.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -13,7 +15,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   User? user = FirebaseAuth.instance.currentUser;
-  UserModel LoggedInUser = UserModel();
+  UserModel loggedinuser = UserModel();
 
   @override
   void initState() {
@@ -23,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
         .doc(user!.uid)
         .get()
         .then((value) {
-      this.LoggedInUser = UserModel.fromMap(value.data());
+      loggedinuser = UserModel.fromMap(value.data());
       setState(() {});
     });
   }
@@ -38,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
         actions: [
           IconButton(
               onPressed: () {
-                logout(context);
+                logout();
               },
               icon: const Icon(Icons.logout)),
         ],
@@ -65,22 +67,50 @@ class _ProfilePageState extends State<ProfilePage> {
               height: 10,
             ),
             Text(
-              '${LoggedInUser.firstname}${LoggedInUser.secondname}',
+              '${loggedinuser.firstname}${loggedinuser.secondname}',
               style: const TextStyle(
                   fontWeight: FontWeight.w500, color: Colors.black54),
             ),
             Text(
-              '${LoggedInUser.email}',
+              '${loggedinuser.email}',
               style: const TextStyle(
                   fontWeight: FontWeight.w500, color: Colors.black54),
-            )
+            ),
+            Text(
+              '${loggedinuser.uid}',
+              style: const TextStyle(
+                  fontWeight: FontWeight.w500, color: Colors.black54),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ImageUpload(userId: loggedinuser.uid),
+                      ));
+                },
+                child: const Text('Upload Image')),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ShowUploads(userId: loggedinuser.uid),
+                      ));
+                },
+                child: const Text('Show Images')),
           ],
         ),
       )),
     );
   }
 
-  Future<void> logout(BuildContext context) async {
+  Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
     Navigator.pushReplacementNamed(context, '/');
   }

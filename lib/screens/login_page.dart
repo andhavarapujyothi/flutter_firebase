@@ -117,6 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text("Don't have an account?"),
                       TextButton(
