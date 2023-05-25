@@ -34,7 +34,7 @@ class _ShowUploadsState extends State<ShowUploads> {
                 String url = snapshot.data!.docs[index]['downloadURL'];
                 return Image.network(
                   url,
-                  height: 300,
+                  height: 150,
                   fit: BoxFit.cover,
                 );
               },
