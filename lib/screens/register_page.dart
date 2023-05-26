@@ -140,11 +140,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: _passwordcontroller,
                     obscureText: true,
                     validator: (value) {
-                      if (value!.isEmpty &&
-                          _passwordcontroller.text.length < 6) {
-                        return ('password length will be 6 characters');
+                      if (value!.isEmpty) {
+                        return ('please enter password');
+                      } else if (_passwordcontroller.text.length < 6) {
+                        return ('Please enter minimum 6 characters');
+                      } else {
+                        return null;
                       }
-                      return null;
                     },
                     onSaved: (newValue) {
                       _passwordcontroller.text = newValue!;
@@ -169,7 +171,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     validator: (value) {
                       if (_confirmpasswordcontroller.text !=
                           _passwordcontroller.text) {
-                        return ("password don't match");
+                        return ("Password is not matching");
                       }
                       return null;
                     },

@@ -103,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ShowUploads(userId: loggedinuser.uid),
                       ));
                 },
-                child: const Text('Show Images')),
+                child: const Text('Show Uploads')),
           ],
         ),
       )),

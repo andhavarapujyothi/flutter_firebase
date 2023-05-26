@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase/model/user_model.dart';
 
 class ShowUploads extends StatefulWidget {
   String? userId;
@@ -10,6 +12,22 @@ class ShowUploads extends StatefulWidget {
 }
 
 class _ShowUploadsState extends State<ShowUploads> {
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedinuser = UserModel();
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      loggedinuser = UserModel.fromMap(value.data());
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +52,7 @@ class _ShowUploadsState extends State<ShowUploads> {
                 String url = snapshot.data!.docs[index]['downloadURL'];
                 return Image.network(
                   url,
-                  height: 150,
+                  height: 300,
                   fit: BoxFit.cover,
                 );
               },
