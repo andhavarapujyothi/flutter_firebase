@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-//import 'package:flutter_firebase/screens/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,6 +10,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool showpassword = false;
   final _formkey = GlobalKey<FormState>();
   final _emailcontroller = TextEditingController();
   final _passwordcontroller = TextEditingController();
@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                   //password field
                   TextFormField(
                     controller: _passwordcontroller,
-                    obscureText: true,
+                    obscureText: showpassword ? false : true,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return ('Please enter your password');
@@ -86,7 +86,14 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.vpn_key),
+                        prefixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                showpassword = !showpassword;
+                              });
+                            },
+                            icon: Icon(
+                                showpassword ? Icons.lock_open : Icons.lock)),
                         hintText: 'Enter Password',
                         labelText: 'Password',
                         contentPadding:

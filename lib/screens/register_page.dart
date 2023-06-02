@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/model/user_model.dart';
 import 'package:flutter_firebase/screens/profile_page.dart';
@@ -14,6 +13,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  bool showpassword = false;
   final _formkey = GlobalKey<FormState>();
   final _firstnamecontroller = TextEditingController();
   final _secondnamecontroller = TextEditingController();
@@ -89,7 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return ('Please enter your secondname');
+                        return ('Please enter your lastname');
                       }
                       return null;
                     },
@@ -99,8 +99,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.person),
-                      hintText: 'Enter Second Name',
-                      labelText: 'Second Name',
+                      hintText: 'Enter Last Name',
+                      labelText: 'Last Name',
                       contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
@@ -115,9 +115,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return ('Please enter your email');
+                        return 'Please enter your email';
                       }
-                      return null;
+                      // value!.isEmpty ? 'Please enter your email' : null;
+                      //value.contains('@') ? 'Please enter valid email' : null;
                     },
                     onSaved: (newValue) {
                       _emailcontroller.text = newValue!;
@@ -138,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   //password field
                   TextFormField(
                     controller: _passwordcontroller,
-                    obscureText: true,
+                    obscureText: showpassword ? false : true,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return ('please enter password');
@@ -153,7 +154,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     },
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.vpn_key),
+                        prefixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                showpassword = !showpassword;
+                              });
+                            },
+                            icon: Icon(
+                                showpassword ? Icons.lock_open : Icons.lock)),
                         hintText: 'Enter Password',
                         labelText: 'Password',
                         contentPadding:
@@ -167,7 +175,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   //confirm password field
                   TextFormField(
                     controller: _confirmpasswordcontroller,
-                    obscureText: true,
+                    obscureText: showpassword ? false : true,
                     validator: (value) {
                       if (_confirmpasswordcontroller.text !=
                           _passwordcontroller.text) {
@@ -180,7 +188,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     },
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.vpn_key),
+                        prefixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                showpassword = !showpassword;
+                              });
+                            },
+                            icon: Icon(
+                                showpassword ? Icons.lock_open : Icons.lock)),
                         hintText: 'Enter Confirm Password',
                         labelText: 'Confirm Password',
                         contentPadding:
